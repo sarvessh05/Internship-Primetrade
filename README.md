@@ -56,6 +56,22 @@ A role-based Warehouse Management System (WMS) with JWT authentication and granu
 - Python 3.11+
 - Node.js 18+
 - PostgreSQL Database
+- Docker & Docker Compose (optional, for containerized run)
+
+### Docker Setup (Self-Contained Live Stack)
+
+If you prefer to run the entire backend, frontend, and database automatically inside Docker containers:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+1. **PostgreSQL** on port `5432` (database volumes persisted in Docker `pgdata`).
+2. **FastAPI Backend** on `http://localhost:8000` (auto-runs migrations before starting).
+3. **React Frontend** on `http://localhost:80` (API calls proxied via Nginx).
+
+Open `http://localhost` in your browser to view the application.
 
 ### Backend
 
@@ -230,3 +246,20 @@ erDiagram
 | GET | `/api/v1/employees/` | JWT | List all registered warehouse employees, sorted newest first. |
 | PATCH | `/api/v1/employees/{id}/deactivate` | JWT | Block an employee from logging in (prevents auth without deleting data). |
 | PATCH | `/api/v1/employees/{id}/activate` | JWT | Restore warehouse/app access for a deactivated employee. |
+
+---
+
+## 🏗️ Architecture & Scalability
+
+A complete design overview of how this WMS system scales (load balancing, caching with Redis, PgBouncer pool tuning, database partition schema, and microservice decoupled events) is detailed in [SCALABILITY.md](SCALABILITY.md).
+
+---
+
+## 🧪 Postman & API Import
+
+The static OpenAPI 3.0.0 specification file for this project is available at [openapi.json](openapi.json).
+You can import this file directly into Postman to load all endpoints, query parameters, schemas, and routes automatically:
+1. In Postman, click **Import** in the top left.
+2. Select the `openapi.json` file from this project root.
+3. Postman will automatically construct a complete collection containing all auth, employee, and admin endpoints.
+
