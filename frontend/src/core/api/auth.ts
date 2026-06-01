@@ -12,6 +12,10 @@ export interface User {
 
 export interface AuthResponse { token: string; user: User; }
 
+// Check setup status — returns if admin exists
+export const getSetupStatus = () =>
+  api.get("/auth/setup-status").then(r => r.data.data as { admin_exists: boolean });
+
 // One-time admin setup — allowed only if no admin exists
 export const registerAdmin = (name: string, email: string, password: string) =>
   api.post("/auth/register/admin", { name, email, password }).then(r => r.data.data as User);

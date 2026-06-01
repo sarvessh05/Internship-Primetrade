@@ -21,6 +21,12 @@ class InviteRequest(BaseModel):
     email: EmailStr
 
 
+@router.get("/setup-status", summary="Check if admin exists in the system")
+def get_setup_status(db: Session = Depends(get_db)):
+    admin_exists = db.query(User).filter(User.role == Role.ADMIN).first() is not None
+    return ok("Status fetched", {"admin_exists": admin_exists})
+
+
 @router.post(
     "/register/admin",
     status_code=status.HTTP_201_CREATED,
