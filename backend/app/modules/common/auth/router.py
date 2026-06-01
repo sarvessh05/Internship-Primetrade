@@ -25,10 +25,10 @@ class InviteRequest(BaseModel):
     "/register/admin",
     status_code=status.HTTP_201_CREATED,
     summary="One-time admin account setup",
-    description="Requires ADMIN_SECRET from .env. Run this once to bootstrap the system.",
+    description="Sets up the initial admin account. Allowed only if no Admin users exist in the database.",
 )
 def register_admin(body: AdminRegisterRequest, db: Session = Depends(get_db)):
-    user = service.register_admin(db, body.name, body.email, body.password, body.admin_secret)
+    user = service.register_admin(db, body.name, body.email, body.password)
     return created("Admin registered", UserOut.model_validate(user))
 
 

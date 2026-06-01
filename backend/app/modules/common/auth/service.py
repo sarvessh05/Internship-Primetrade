@@ -7,14 +7,17 @@ from app.models.user import User
 from app.models.invite import InviteToken
 from app.models.enums import Role
 from app.core.security import hash_password, verify_password, create_access_token
-from app.core.exceptions import conflict, unauthorized, not_found
+from app.core.exceptions import conflict, unauthorized, not_found, forbidden
 from app.core.config import settings
 
 
-def register_admin(db: Session, name: str, email: str, password: str, admin_secret: str) -> User:
-    """Create the first admin account. Requires the ADMIN_SECRET from .env."""
-    if admin_secret != settings.ADMIN_SECRET:
-        raise unauthorized("Invalid admin secret")
+def register_admin(db: Session, name: str, email: str, password: str) -> User:
+    """Create the first admin account. Allowed only if no Admin exists in the system."""
+    # Enforce setup wizard lock: check if an Admin already exists
+    admin_exists = db.query(User).filter(User.role == Role.ADMIN).first()
+    if admin_exists:
+        raise forbidden("Admin account already exists. Setup is disabled.")
+
     if db.query(User).filter(User.email == email).first():
         raise conflict("Email already registered")
     user = User(name=name, email=email, password=hash_password(password), role=Role.ADMIN)

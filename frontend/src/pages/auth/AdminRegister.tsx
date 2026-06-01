@@ -6,7 +6,7 @@ import { registerAdmin, login } from "../../core/api/auth";
 import PasswordStrength, { PASSWORD_RULES, getStrength } from "../../components/common/PasswordStrength";
 import { useAuth } from "../../core/context/AuthContext";
 
-interface FormData { name: string; email: string; password: string; confirmPassword: string; admin_secret: string; }
+interface FormData { name: string; email: string; password: string; confirmPassword: string; }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -34,7 +34,7 @@ export default function AdminRegister() {
     setApiError(""); setLoading(true);
     try {
       // 1. Create the admin
-      await registerAdmin(data.name, data.email, data.password, data.admin_secret);
+      await registerAdmin(data.name, data.email, data.password);
       
       // 2. Automatically log in the admin
       const authRes = await login(data.email, data.password);
@@ -110,14 +110,6 @@ export default function AdminRegister() {
           </div>
           {confirmPassword && !passwordsMatch && <p className="field-error">⚠ Passwords do not match</p>}
           {passwordsMatch && <p className="field-success">✓ Passwords match</p>}
-        </div>
-
-        <div className="field">
-          <label className="field-label">Admin Secret Key</label>
-          <input className="input" type="password" placeholder="Secret key from .env"
-            {...register("admin_secret", { required: "Admin secret is required" })} />
-          {errors.admin_secret && <p className="field-error">⚠ {errors.admin_secret.message}</p>}
-          <p style={{ fontSize: "0.75rem", color: "var(--gray-400)", marginTop: "4px" }}>Set ADMIN_SECRET in your backend .env</p>
         </div>
 
         <button className="btn btn-primary btn-full" type="submit" disabled={!formReady || loading} style={{ marginTop: "0.5rem" }}>

@@ -29,7 +29,7 @@ app = FastAPI(
 Role-based access control with **ADMIN** and **EMPLOYEE** roles.
 
 ### Setup Flow
-1. Admin registers via `POST /api/v1/auth/register/admin` (requires `ADMIN_SECRET`)
+1. First admin registers via `POST /api/v1/auth/register/admin` (allowed only if no admin exists in the system)
 2. Admin invites employees via `POST /api/v1/auth/invite`
 3. Employee registers via `POST /api/v1/auth/register/employee` using invite token
 4. Everyone logs in via `POST /api/v1/auth/login`

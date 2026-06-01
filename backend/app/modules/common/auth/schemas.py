@@ -24,7 +24,6 @@ class AdminRegisterRequest(BaseModel):
     name: str
     email: EmailStr
     password: str
-    admin_secret: str  # must match ADMIN_SECRET in .env
 
     @field_validator("name")
     @classmethod

@@ -12,9 +12,9 @@ export interface User {
 
 export interface AuthResponse { token: string; user: User; }
 
-// One-time admin setup — requires ADMIN_SECRET from .env
-export const registerAdmin = (name: string, email: string, password: string, admin_secret: string) =>
-  api.post("/auth/register/admin", { name, email, password, admin_secret }).then(r => r.data.data as User);
+// One-time admin setup — allowed only if no admin exists
+export const registerAdmin = (name: string, email: string, password: string) =>
+  api.post("/auth/register/admin", { name, email, password }).then(r => r.data.data as User);
 
 // Employee completes registration using the invite token from their link
 export const registerEmployee = (name: string, password: string, token: string) =>
