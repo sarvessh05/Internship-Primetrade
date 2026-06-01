@@ -41,12 +41,11 @@ A role-based Warehouse Management System (WMS) with JWT authentication and granu
 │   ├── alembic/               # Database migrations
 │   └── requirements.txt
 └── frontend/
-    └── frontend/
-        └── src/
-            ├── api/           # Axios instance + API call specifications
-            ├── components/    # Common widgets (Protected routes, Password checkers, Loaders)
-            ├── context/       # AuthContext containing global state (user profile + token)
-            └── pages/         # Login, AdminRegister, EmployeeRegister, Dashboard
+    └── src/
+        ├── api/           # Axios instance + API call specifications
+        ├── components/    # Common widgets (Protected routes, Password checkers, Loaders)
+        ├── context/       # AuthContext containing global state (user profile + token)
+        └── pages/         # Login, AdminRegister, EmployeeRegister, Dashboard
 ```
 
 ---
@@ -87,7 +86,7 @@ uvicorn app.main:app --reload
 ### Frontend
 
 ```bash
-cd frontend/frontend
+cd frontend
 
 # 1. Install dependencies
 npm install
@@ -111,7 +110,7 @@ npm run dev
 | `JWT_EXPIRE_DAYS` | Token longevity in days (default: 7)         | `7`                                 |
 | `ADMIN_SECRET`    | Secret required for bootstrapping an Admin   | `warehouse-admin-2024`              |
 
-### Frontend (`frontend/frontend/.env`)
+### Frontend (`frontend/.env`)
 
 | Variable       | Description                        | Example                         |
 |----------------|------------------------------------|---------------------------------|

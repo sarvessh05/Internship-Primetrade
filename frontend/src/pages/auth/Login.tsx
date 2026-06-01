@@ -86,6 +86,9 @@ export default function Login() {
       <p style={{ textAlign: "center", fontSize: "0.875rem", color: "var(--gray-500)" }}>
         Got an invite? <Link to="/register/employee" style={{ fontWeight: 600 }}>Complete registration</Link>
       </p>
+      <p style={{ textAlign: "center", fontSize: "0.875rem", color: "var(--gray-500)", marginTop: "0.5rem" }}>
+        First time? <Link to="/register/admin" style={{ fontWeight: 600 }}>Setup Admin Account</Link>
+      </p>
     </div></div>
   );
 }

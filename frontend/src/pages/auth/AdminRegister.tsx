@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import { registerAdmin } from "../../core/api/auth";
+import { registerAdmin, login } from "../../core/api/auth";
 import PasswordStrength, { PASSWORD_RULES, getStrength } from "../../components/common/PasswordStrength";
+import { useAuth } from "../../core/context/AuthContext";
 
 interface FormData { name: string; email: string; password: string; confirmPassword: string; admin_secret: string; }
 
@@ -15,6 +16,7 @@ export default function AdminRegister() {
   const [loading, setLoading]   = useState(false);
   const [showPw, setShowPw]     = useState(false);
   const [success, setSuccess]   = useState(false);
+  const { setAuth }             = useAuth();
   const navigate = useNavigate();
 
   const password        = useWatch({ control, name: "password",        defaultValue: "" });
@@ -31,21 +33,27 @@ export default function AdminRegister() {
   const onSubmit = async (data: FormData) => {
     setApiError(""); setLoading(true);
     try {
+      // 1. Create the admin
       await registerAdmin(data.name, data.email, data.password, data.admin_secret);
+      
+      // 2. Automatically log in the admin
+      const authRes = await login(data.email, data.password);
+      setAuth(authRes.user, authRes.token);
+      
       setSuccess(true);
-      setTimeout(() => navigate("/login"), 1800);
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err: any) {
       const d = err.response?.data;
       setApiError(d?.errors?.length ? d.errors.map((e: any) => e.message).join(" · ") : d?.message || "Registration failed");
     } finally { setLoading(false); }
   };
 
-  // Success screen shown briefly before redirecting to login
+  // Success screen shown briefly before redirecting to dashboard
   if (success) return (
     <div className="auth-bg"><div className="auth-card" style={{ textAlign: "center" }}>
       <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏭</div>
       <h2 className="auth-title" style={{ textAlign: "center" }}>Warehouse is ready!</h2>
-      <p style={{ color: "var(--gray-500)", marginTop: "0.5rem" }}>Redirecting to login...</p>
+      <p style={{ color: "var(--gray-500)", marginTop: "0.5rem" }}>Entering dashboard...</p>
       <div style={{ marginTop: "1.5rem" }}><div className="spinner spinner-dark" style={{ margin: "0 auto" }} /></div>
     </div></div>
   );
