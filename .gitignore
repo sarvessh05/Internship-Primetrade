@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+dist/
+.pytest_cache/
+
+# Environment — never commit secrets
+.env
+*.env
+
+# Node
+node_modules/
+dist/
+.DS_Store
+
+# Alembic compiled
+backend/alembic/versions/__pycache__/
+
+# IDE
+.vscode/
+.idea/
